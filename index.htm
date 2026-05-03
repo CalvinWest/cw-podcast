@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Podcast Editing - by Calvin West</title>
+    <meta name="description" content="Professional podcast editing services. Audio and video editing for podcasters who care about quality." />
+
+    <!-- Preconnect to fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Reuse existing site CSS -->
+    <link rel="stylesheet" href="https://calvinwest.com/wp-content/themes/sevagakelian/libraries/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://calvinwest.com/wp-content/themes/sevagakelian/style.css">
+    <link rel="stylesheet" href="https://calvinwest.com/wp-content/themes/sevagakelian/calculator.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Page-specific tweaks -->
+    <style>
+        /* Format toggle buttons */
+        .format-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .format-btn, .angle-btn {
+            padding: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            border: 2px solid #E5E5E5;
+            background: #fff;
+            color: var(--grey-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 1px;
+        }
+        .format-btn:hover, .angle-btn:hover {
+            border-color: var(--secondary-color);
+        }
+        .format-btn.active, .angle-btn.active {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        /* Length slider */
+        .length-row {
+            padding: 20px;
+            border-top: 2px solid #E5E5E5;
+        }
+        .length-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+        .length-header label {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--grey-color);
+        }
+        .length-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        input[type="range"].length-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            background: #E5E5E5;
+            border-radius: 3px;
+            outline: none;
+        }
+        input[type="range"].length-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        input[type="range"].length-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Camera angles row */
+        .angles-row {
+            padding: 20px;
+            border-top: 2px solid #E5E5E5;
+        }
+        .angles-row > p.angles-label {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: var(--grey-color);
+        }
+        .angles-row > p.angles-hint {
+            font-size: 12px;
+            color: var(--grey-color);
+            opacity: 0.6;
+            margin-bottom: 12px;
+        }
+        .angles-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        /* Clips quantity stepper */
+        .clips-stepper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid #E5E5E5;
+            border-radius: 6px;
+            padding: 4px;
+        }
+        .clips-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--grey-color);
+            transition: color 0.2s ease;
+        }
+        .clips-btn.plus { color: var(--secondary-color); }
+        .clips-btn:hover { opacity: 0.7; }
+        .clips-count {
+            font-size: 16px;
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Hide the toggle switch when the feature uses a stepper */
+        .feature.has-stepper .sw {
+            display: none;
+        }
+
+        /* Mobile: hide the regular menu and show hamburger instead */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            width: 44px;
+            height: 44px;
+            background: var(--grey-color);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            z-index: 10000;
+            padding: 0;
+            transition: background-color 0.2s ease;
+        }
+        .mobile-menu-toggle:hover {
+            background: var(--secondary-color);
+        }
+        .mobile-menu-toggle .bar {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #fff;
+            margin: 5px auto;
+            transition: all 0.3s ease;
+        }
+        .mobile-menu-toggle.is-open .bar:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .mobile-menu-toggle.is-open .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .mobile-menu-toggle.is-open .bar:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--grey-color);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            align-items: center;
+            justify-content: center;
+        }
+        .mobile-menu-overlay.is-open {
+            display: flex;
+            opacity: 1;
+        }
+        .mobile-menu-overlay ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+        .mobile-menu-overlay ul li {
+            margin: 24px 0;
+        }
+        .mobile-menu-overlay ul li a {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .mobile-menu-overlay ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        @media screen and (max-width: 992px) {
+            .main-menu-holder,
+            .main-menu {
+                display: none !important;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Calculator section labels — match .feature padding behavior */
+        .calc-label {
+            padding: 20px 20px 0;
+            text-align: left;
+        }
+        .calc-label p {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--grey-color);
+        }
+        .calc-label.no-margin p {
+            margin-bottom: 0;
+        }
+        @media screen and (max-width: 992px) {
+            .calc-label {
+                padding: 20px 0 0;
+            }
+        }
+
+        /* "Back to lyric videos" link */
+        .cross-link {
+            display: inline-block;
+            margin-top: 16px;
+            color: var(--secondary-color);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            opacity: 0.8;
+            color: var(--secondary-color);
+        }
+
+        /* Portfolio items — let the YouTube thumbnail's natural 16:9 drive the height */
+        #portfolio-podcast .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            line-height: 0;
+            height: auto !important;
+            padding: 0 !important;
+        }
+        #portfolio-podcast .portfolio-item::before,
+        #portfolio-podcast .portfolio-item::after {
+            content: none !important;
+            display: none !important;
+            padding: 0 !important;
+        }
+        #portfolio-podcast .portfolio-item img {
+            width: 100%;
+            height: auto !important;
+            display: block;
+            position: static !important;
+        }
+        #portfolio-podcast .portfolio-black-over,
+        #portfolio-podcast .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Lightgallery — hide every toolbar icon except close */
+        .lg-toolbar .lg-icon {
+            display: none !important;
+        }
+        .lg-toolbar .lg-close {
+            display: block !important;
+        }
+        /* Hide the bottom progress/sub-html area too if it shows */
+        .lg-sub-html,
+        .lg-progress-bar {
+            display: none !important;
+        }
+
+        /* Header background fallback */
+        #header-podcast {
+            background-color: var(--grey-color);
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Mobile tweaks for the new toggle buttons */
+        @media screen and (max-width: 600px) {
+            .format-btn, .angle-btn {
+                padding: 10px 6px;
+                font-size: 12px;
+                letter-spacing: 0.5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile menu (hidden on desktop via CSS) -->
+<button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+</button>
+<div class="mobile-menu-overlay" id="mobile-menu-overlay">
+    <ul>
+        <li><a href="#portfolio-podcast">PORTFOLIO</a></li>
+        <li><a href="#about-podcast">ABOUT</a></li>
+        <li><a href="#calculator-podcast">PRICING</a></li>
+        <li><a href="#contact-podcast">CONTACT</a></li>
+    </ul>
+</div>
+
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <div id="header-podcast" class="header-full sa-section" style="background-image:url(https://calvinwest.com/wp-content/uploads/2026/01/cw-productions-header.jpg);">
+        <div class="header-overlay"></div>
+        <div class="header-content">
+            <h3 class="header_name">CALVIN WEST</h3>
+            <h1 class="header_description">PODCAST EDITING</h1>
+            <a href="#portfolio-podcast" class="sa-button">
+                view my work <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </a>
+        </div>
+        <a href="#about-podcast" class="scroll-down-icon">
+            <span></span>
+        </a>
+    </div>
+
+    <!-- NAV MENU -->
+    <div class="main-menu-holder">
+        <div class="main-menu">
+            <ul class="menu">
+                <li><a href="#portfolio-podcast">PORTFOLIO</a></li>
+                <li><a href="#about-podcast">ABOUT</a></li>
+                <li><a href="#calculator-podcast">PRICING</a></li>
+                <li><a href="#contact-podcast">CONTACT</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div id="about-podcast" class="section sa-section" style="background-color:#ffffff;">
+        <div class="container">
+            <h2 class="section-title">ABOUT</h2>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-lg-1 col-md-12"></div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="about-description">
+                            <p>I've been editing video and audio professionally for over a decade — lyric videos, music projects, and educational content for my own YouTube channel. For the past year and a half I've also been co-producing a podcast, handling the audio cleanup, multi-cam video editing, and short-form clips for social.</p>
+                            <p>Now I'm offering podcast editing as a dedicated service. If you care about how your show sounds and looks but don't have the time (or the patience) to edit it yourself, let's talk.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="about-image">
+                            <img src="https://calvinwest.com/wp-content/uploads/2026/01/calvinwest-headshot.jpg" alt="calvin west headshot" />
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-12"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PORTFOLIO -->
+    <div id="portfolio-podcast" class="section sa-section" style="background-color:#f5f5f5;">
+        <div class="container">
+            <h2 class="section-title">RECENT WORK<hr></h2>
+            <div class="section-content">
+                <div class="row custom-gutter">
+                    <div class="col-sm-4 col-12 project-lightbox">
+                        <a class="porfolion-video" href="https://www.youtube.com/watch?v=ZfLVJuPpe4I">
+                            <div class="portfolio-item">
+                                <img src="https://img.youtube.com/vi/ZfLVJuPpe4I/maxresdefault.jpg" alt="podcast example 1" />
+                                <div class="portfolio-black-over"></div>
+                                <div class="portfolio-overlay">
+                                    <div class="portfolio-text">
+                                        <h5>Episode Highlight</h5>
+                                        <h3>Sample Podcast 1</h3>
+                                        <i class="fa fa-play" aria-hidden="true"></i>
+                                        <h4>full episode edit</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-4 col-12 project-lightbox">
+                        <a class="porfolion-video" href="https://www.youtube.com/watch?v=ZfLVJuPpe4I">
+                            <div class="portfolio-item">
+                                <img src="https://img.youtube.com/vi/ZfLVJuPpe4I/maxresdefault.jpg" alt="podcast example 2" />
+                                <div class="portfolio-black-over"></div>
+                                <div class="portfolio-overlay">
+                                    <div class="portfolio-text">
+                                        <h5>Interview Cut</h5>
+                                        <h3>Sample Podcast 2</h3>
+                                        <i class="fa fa-play" aria-hidden="true"></i>
+                                        <h4>multi-cam edit</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-4 col-12 project-lightbox">
+                        <a class="porfolion-video" href="https://www.youtube.com/watch?v=ZfLVJuPpe4I">
+                            <div class="portfolio-item">
+                                <img src="https://img.youtube.com/vi/ZfLVJuPpe4I/maxresdefault.jpg" alt="short form clip example" />
+                                <div class="portfolio-black-over"></div>
+                                <div class="portfolio-overlay">
+                                    <div class="portfolio-text">
+                                        <h5>Vertical Clip</h5>
+                                        <h3>Short-Form Sample</h3>
+                                        <i class="fa fa-play" aria-hidden="true"></i>
+                                        <h4>tiktok / reels</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CALCULATOR -->
+    <div id="calculator-podcast" class="section sa-section" style="background-color:#ffffff;">
+        <div class="container">
+            <h2 class="section-title">PRICING<hr></h2>
+            <h2 class="section-description">Customize your edit. Get a per-episode estimate.</h2>
+            <div class="section-content">
+                <div class="calculator-content">
+                    <div class="calculator-actions">
+
+                        <!-- Format toggle (above the .feature rows) -->
+                        <div class="calc-label">
+                            <p>Format</p>
+                            <div class="format-toggle">
+                                <button type="button" class="format-btn active" data-fmt="audio" data-base="150">AUDIO ONLY</button>
+                                <button type="button" class="format-btn" data-fmt="video" data-base="300">AUDIO + VIDEO</button>
+                            </div>
+                        </div>
+
+                        <!-- Length slider -->
+                        <div class="length-row">
+                            <div class="length-header">
+                                <label>Raw recording duration</label>
+                                <span class="length-value" id="length-out">60 min</span>
+                            </div>
+                            <input type="range" id="length-slider" class="length-slider" min="20" max="120" step="5" value="60">
+                        </div>
+
+                        <!-- Camera angles (hidden when audio-only) -->
+                        <div class="angles-row" id="angles-row" style="display:none;">
+                            <p class="angles-label">Camera angles</p>
+                            <p class="angles-hint">Split-screen of two webcams counts as 2.</p>
+                            <div class="angles-buttons">
+                                <button type="button" class="angle-btn active" data-ang="1">1</button>
+                                <button type="button" class="angle-btn" data-ang="1.2">2</button>
+                                <button type="button" class="angle-btn" data-ang="1.4">3+</button>
+                            </div>
+                        </div>
+
+                        <!-- Add-ons header -->
+                        <div class="calc-label no-margin">
+                            <p>Add-ons</p>
+                        </div>
+
+                        <!-- Short-form clips (uses stepper instead of toggle) -->
+                        <div class="feature has-stepper">
+                            <div class="feature-info">
+                                <i class="fa fa-mobile" aria-hidden="true"></i>
+                                <div>
+                                    <h3>Short-form clips</h3>
+                                    <p>Vertical clips for TikTok, Reels, Shorts.</p>
+                                </div>
+                            </div>
+                            <div class="clips-stepper">
+                                <button type="button" class="clips-btn minus" id="clips-down">−</button>
+                                <span class="clips-count" id="clips-count">0</span>
+                                <button type="button" class="clips-btn plus" id="clips-up">+</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="calculator-results">
+                        <h4>Your estimate</h4>
+                        <h5><span id="total-price">150</span> <i class="fa fa-usd" aria-hidden="true"></i></h5>
+                        <a class="sa-button-dark" href="mailto:calvin@calvinwest.com?subject=Podcast%20Editing%20Inquiry">CONTACT</a>
+                        <h4 class="delivery-text">
+                            Delivery Time: <span id="delivery-time">4~6 days</span>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROCESS -->
+    <div class="section sa-section" style="background-color:#f5f5f5;">
+        <div class="container">
+            <h2 class="section-title">THE PROCESS<hr></h2>
+            <div class="section-content">
+                <div class="home-boxes">
+                    <div class="home-box">
+                        <div class="box-icon"><i class="fa fa-comment" aria-hidden="true"></i></div>
+                        <div class="box-title"><h4>1. Get in Touch</h4></div>
+                        <div class="box-description"><p>Tell me about your podcast — format, length, cadence, and any specific needs.</p></div>
+                    </div>
+                    <div class="home-box">
+                        <div class="box-icon"><i class="fa fa-upload" aria-hidden="true"></i></div>
+                        <div class="box-title"><h4>2. Send Files</h4></div>
+                        <div class="box-description"><p>Upload your raw audio and video to Dropbox or Google Drive.</p></div>
+                    </div>
+                    <div class="home-box">
+                        <div class="box-icon"><i class="fa fa-magic" aria-hidden="true"></i></div>
+                        <div class="box-title"><h4>3. I Edit</h4></div>
+                        <div class="box-description"><p>Clean audio, multi-cam edit, music, graphics — delivered within a week.</p></div>
+                    </div>
+                    <div class="home-box">
+                        <div class="box-icon"><i class="fa fa-recycle" aria-hidden="true"></i></div>
+                        <div class="box-title"><h4>4. Revisions</h4></div>
+                        <div class="box-description"><p>Want changes? No problem, free revisions until you're happy.</p></div>
+                    </div>
+                    <div class="home-box">
+                        <div class="box-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
+                        <div class="box-title"><h4>5. Final Cut</h4></div>
+                        <div class="box-description"><p>Delivered in your preferred format, ready to publish.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="contact-podcast" class="section sa-section" style="background-color:#252a30;">
+        <div class="container">
+            <h2 style="color:#ffffff" class="section-title">GET IN TOUCH!<hr></h2>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-lg-2"></div>
+                    <div class="col-sm-12 col-md-6 col-lg-4 contact-info" style="color:#ffffff">
+                        <div class="cinfo">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <span>Alicante, Spain</span>
+                        </div>
+                        <div class="cinfo">
+                            <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                            <span>+34 692 536 396</span>
+                        </div>
+                        <div class="cinfo">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                            <span><a href="mailto:calvin@calvinwest.com">calvin@calvinwest.com</a></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4 contact-form" style="color:#ffffff">
+                        <p>Send me an email at <a href="mailto:calvin@calvinwest.com?subject=Podcast%20Editing%20Inquiry">calvin@calvinwest.com</a> with your podcast details and I'll respond within a few hours!</p>
+                    </div>
+                    <div class="col-lg-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOCIAL FOOTER -->
+    <div id="social-section" class="sa-section">
+        <div class="container">
+            <div class="social-content section-content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="social-icon" href="https://www.instagram.com/calvin.west" target="_blank">
+                            <i class="fa fa-instagram" aria-hidden="true"></i>
+                        </a>
+                        <a class="social-icon" href="https://www.linkedin.com/in/calvin-west" target="_blank">
+                            <i class="fa fa-linkedin-square" aria-hidden="true"></i>
+                        </a>
+                        <a class="social-icon" href="https://www.youtube.com/@calvinwest" target="_blank">
+                            <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                        </a>
+                        <div class="footer-text">
+                            <h5>CALVIN WEST PRODUCTIONS <span>&copy; 2026</span></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /wrapper -->
+
+<!-- jQuery + lightgallery for video modals -->
+<script src="https://calvinwest.com/wp-includes/js/jquery/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery-all.min.js"></script>
+
+<script>
+// Smooth scroll for in-page anchor links (matches the homepage behavior)
+document.querySelectorAll('a[href^="#"]').forEach(function(link){
+    link.addEventListener('click', function(e){
+        var targetId = this.getAttribute('href');
+        if (targetId === '#' || targetId.length < 2) return;
+        var target = document.querySelector(targetId);
+        if (!target) return;
+        e.preventDefault();
+
+        var startY = window.pageYOffset;
+        var targetY = target.getBoundingClientRect().top + startY;
+        var distance = targetY - startY;
+        var duration = 800;
+        var startTime = null;
+
+        // easeInOutQuint — same easing as your homepage
+        function easeInOutQuint(t, b, c, d) {
+            t /= d/2;
+            if (t < 1) return c/2*t*t*t*t*t + b;
+            t -= 2;
+            return c/2*(t*t*t*t*t + 2) + b;
+        }
+
+        function step(currentTime) {
+            if (!startTime) startTime = currentTime;
+            var elapsed = currentTime - startTime;
+            var run = easeInOutQuint(elapsed, startY, distance, duration);
+            window.scrollTo(0, run);
+            if (elapsed < duration) {
+                requestAnimationFrame(step);
+            } else {
+                window.scrollTo(0, targetY);
+            }
+        }
+        requestAnimationFrame(step);
+    });
+});
+
+// Mobile menu toggle
+var mobileToggle = document.getElementById('mobile-menu-toggle');
+var mobileOverlay = document.getElementById('mobile-menu-overlay');
+function closeMobileMenu() {
+    mobileToggle.classList.remove('is-open');
+    mobileOverlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+}
+mobileToggle.addEventListener('click', function(){
+    var isOpen = mobileToggle.classList.toggle('is-open');
+    mobileOverlay.classList.toggle('is-open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+// Close menu when any link inside it is tapped
+mobileOverlay.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', closeMobileMenu);
+});
+
+// Initialize lightgallery on the portfolio
+if (typeof jQuery !== 'undefined' && jQuery.fn.lightGallery) {
+    jQuery('#portfolio-podcast .row').lightGallery({
+        selector: '.porfolion-video',
+        download: false,
+        thumbnail: false,
+        autoplayFirstVideo: true,
+        counter: false,
+        controls: false,
+        hash: false,
+        fullScreen: false,
+        zoom: false,
+        actualSize: false,
+        share: false,
+        autoplay: false,
+        autoplayControls: false
+    });
+}
+</script>
+
+<script>
+(function(){
+    var format = { name: 'audio', base: 150 };
+    var length = 60;
+    var angles = 1;
+    var clips = 0;
+
+    function update() {
+        var lengthMult = 0.6 + (length / 60) * 0.6;
+        var price = format.base * lengthMult * angles;
+        price += clips * 60;
+        price = Math.round(price / 5) * 5;
+        document.getElementById('total-price').textContent = price.toLocaleString();
+    }
+
+    // Format buttons
+    document.querySelectorAll('.format-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+            document.querySelectorAll('.format-btn').forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+            format = { name: btn.dataset.fmt, base: parseFloat(btn.dataset.base) };
+            document.getElementById('angles-row').style.display = (format.name === 'video') ? 'block' : 'none';
+            if (format.name === 'audio') {
+                angles = 1;
+                document.querySelectorAll('.angle-btn').forEach(function(b){ b.classList.remove('active'); });
+                document.querySelector('.angle-btn[data-ang="1"]').classList.add('active');
+            }
+            update();
+        });
+    });
+
+    // Angle buttons
+    document.querySelectorAll('.angle-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+            document.querySelectorAll('.angle-btn').forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+            angles = parseFloat(btn.dataset.ang);
+            update();
+        });
+    });
+
+    // Length slider
+    var slider = document.getElementById('length-slider');
+    slider.addEventListener('input', function(){
+        length = parseInt(slider.value);
+        document.getElementById('length-out').textContent = length + ' min';
+        update();
+    });
+
+    // Clips stepper
+    document.getElementById('clips-up').addEventListener('click', function(){
+        if (clips < 20) clips++;
+        document.getElementById('clips-count').textContent = clips;
+        update();
+    });
+    document.getElementById('clips-down').addEventListener('click', function(){
+        if (clips > 0) clips--;
+        document.getElementById('clips-count').textContent = clips;
+        update();
+    });
+})();
+</script>
+
+</body>
+</html>
