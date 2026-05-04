@@ -2,6 +2,14 @@
 <html lang="en-US">
 <head>
     <meta charset="UTF-8" />
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TWLSQ8P');</script>
+    <!-- End Google Tag Manager -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Podcast Editing - by Calvin West</title>
     <meta name="description" content="Professional podcast editing services. Audio and video editing for podcasters who care about quality." />
@@ -72,6 +80,7 @@
         input[type="range"].length-slider {
             width: 100%;
             -webkit-appearance: none;
+            appearance: none;
             height: 6px;
             background: #E5E5E5;
             border-radius: 3px;
@@ -79,6 +88,7 @@
         }
         input[type="range"].length-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
+            appearance: none;
             width: 20px;
             height: 20px;
             background: var(--secondary-color);
@@ -320,6 +330,11 @@
             background-position: center;
         }
 
+        /* Push hero content down to match homepage positioning (lands on shirt, not face) */
+        #header-podcast .header-content {
+            margin-top: 34vh;
+        }
+
         /* Mobile tweaks for the new toggle buttons */
         @media screen and (max-width: 600px) {
             .format-btn, .angle-btn {
@@ -331,6 +346,11 @@
     </style>
 </head>
 <body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TWLSQ8P"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <!-- Mobile menu (hidden on desktop via CSS) -->
 <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu">
@@ -407,48 +427,45 @@
             <div class="section-content">
                 <div class="row custom-gutter">
                     <div class="col-sm-4 col-12 project-lightbox">
-                        <a class="porfolion-video" href="https://www.youtube.com/watch?v=ZfLVJuPpe4I">
+                        <a class="porfolion-video" href="https://www.youtube.com/watch?v=2MxLIikmIaE">
                             <div class="portfolio-item">
-                                <img src="https://img.youtube.com/vi/ZfLVJuPpe4I/maxresdefault.jpg" alt="podcast example 1" />
+                                <img src="https://img.youtube.com/vi/2MxLIikmIaE/maxresdefault.jpg" alt="Is Fatty15 a SCAM podcast episode" />
                                 <div class="portfolio-black-over"></div>
                                 <div class="portfolio-overlay">
                                     <div class="portfolio-text">
-                                        <h5>Episode Highlight</h5>
-                                        <h3>Sample Podcast 1</h3>
+                                        <h5>Is Fatty15 a SCAM?</h5>
                                         <i class="fa fa-play" aria-hidden="true"></i>
-                                        <h4>full episode edit</h4>
+                                        <h4>full episode</h4>
                                     </div>
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="col-sm-4 col-12 project-lightbox">
-                        <a class="porfolion-video" href="https://www.youtube.com/watch?v=ZfLVJuPpe4I">
+                        <a class="porfolion-video" href="https://www.youtube.com/watch?v=S9ZQbI9BFbg">
                             <div class="portfolio-item">
-                                <img src="https://img.youtube.com/vi/ZfLVJuPpe4I/maxresdefault.jpg" alt="podcast example 2" />
+                                <img src="https://img.youtube.com/vi/S9ZQbI9BFbg/maxresdefault.jpg" alt="Fatty15 supplement industry summary video" />
                                 <div class="portfolio-black-over"></div>
                                 <div class="portfolio-overlay">
                                     <div class="portfolio-text">
-                                        <h5>Interview Cut</h5>
-                                        <h3>Sample Podcast 2</h3>
+                                        <h5>Fatty15 Summary</h5>
                                         <i class="fa fa-play" aria-hidden="true"></i>
-                                        <h4>multi-cam edit</h4>
+                                        <h4>summary video</h4>
                                     </div>
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="col-sm-4 col-12 project-lightbox">
-                        <a class="porfolion-video" href="https://www.youtube.com/watch?v=ZfLVJuPpe4I">
+                        <a class="porfolion-video" href="https://www.youtube.com/watch?v=Ys0gQuj8ZU8">
                             <div class="portfolio-item">
-                                <img src="https://img.youtube.com/vi/ZfLVJuPpe4I/maxresdefault.jpg" alt="short form clip example" />
+                                <img src="https://img.youtube.com/vi/Ys0gQuj8ZU8/maxresdefault.jpg" alt="KETO-CTA study podcast episode" />
                                 <div class="portfolio-black-over"></div>
                                 <div class="portfolio-overlay">
                                     <div class="portfolio-text">
-                                        <h5>Vertical Clip</h5>
-                                        <h3>Short-Form Sample</h3>
+                                        <h5>KETO-CTA Study</h5>
                                         <i class="fa fa-play" aria-hidden="true"></i>
-                                        <h4>tiktok / reels</h4>
+                                        <h4>full episode</h4>
                                     </div>
                                 </div>
                             </div>
@@ -527,42 +544,6 @@
                         <h4 class="delivery-text">
                             Delivery Time: <span id="delivery-time">4~6 days</span>
                         </h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PROCESS -->
-    <div class="section sa-section" style="background-color:#f5f5f5;">
-        <div class="container">
-            <h2 class="section-title">THE PROCESS<hr></h2>
-            <div class="section-content">
-                <div class="home-boxes">
-                    <div class="home-box">
-                        <div class="box-icon"><i class="fa fa-comment" aria-hidden="true"></i></div>
-                        <div class="box-title"><h4>1. Get in Touch</h4></div>
-                        <div class="box-description"><p>Tell me about your podcast — format, length, cadence, and any specific needs.</p></div>
-                    </div>
-                    <div class="home-box">
-                        <div class="box-icon"><i class="fa fa-upload" aria-hidden="true"></i></div>
-                        <div class="box-title"><h4>2. Send Files</h4></div>
-                        <div class="box-description"><p>Upload your raw audio and video to Dropbox or Google Drive.</p></div>
-                    </div>
-                    <div class="home-box">
-                        <div class="box-icon"><i class="fa fa-magic" aria-hidden="true"></i></div>
-                        <div class="box-title"><h4>3. I Edit</h4></div>
-                        <div class="box-description"><p>Clean audio, multi-cam edit, music, graphics — delivered within a week.</p></div>
-                    </div>
-                    <div class="home-box">
-                        <div class="box-icon"><i class="fa fa-recycle" aria-hidden="true"></i></div>
-                        <div class="box-title"><h4>4. Revisions</h4></div>
-                        <div class="box-description"><p>Want changes? No problem, free revisions until you're happy.</p></div>
-                    </div>
-                    <div class="home-box">
-                        <div class="box-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
-                        <div class="box-title"><h4>5. Final Cut</h4></div>
-                        <div class="box-description"><p>Delivered in your preferred format, ready to publish.</p></div>
                     </div>
                 </div>
             </div>
